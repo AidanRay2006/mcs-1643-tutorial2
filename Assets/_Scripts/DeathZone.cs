@@ -8,10 +8,12 @@ public class DeathZone : MonoBehaviour
     public Transform startPos;
     public GameObject ballPrefab;
     public int opposingPlayer;
+    public AudioClip outSound;
     private void OnTriggerEnter(Collider other)
     {
         if (other.transform.CompareTag("Ball"))
         {
+            AudioSource.PlayClipAtPoint(outSound, other.transform.position, 1f);
             //Debug.Log($"{other.transform.name} hust entered {transform.name}");
 
             //set other player's score up by 1
@@ -21,7 +23,10 @@ public class DeathZone : MonoBehaviour
             Destroy(other.gameObject);
 
             //create a new ball in the center
-            Instantiate(ballPrefab, startPos.position, Quaternion.identity);
+            if(GameManager.playing)
+            {
+                Instantiate(ballPrefab, startPos.position, Quaternion.identity);
+            }
         }
     }
 }
